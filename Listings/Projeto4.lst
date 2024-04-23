@@ -1,0 +1,218 @@
+A51 MACRO ASSEMBLER  PROJETO4                                                             04/18/2024 14:36:05 PAGE     1
+
+
+MACRO ASSEMBLER A51 V8.2.7.0
+OBJECT MODULE PLACED IN .\Objects\Projeto4.obj
+ASSEMBLER INVOKED BY: C:\Keil_v5\C51\BIN\A51.EXE Projeto4.a51 SET(SMALL) DEBUG PRINT(.\Listings\Projeto4.lst) OBJECT(.\O
+                      bjects\Projeto4.obj) EP
+
+LOC  OBJ            LINE     SOURCE
+
+                       1     ;Base Projeto 4
+                       2     
+  00D8                 3     TempoH                  EQU 0xD8                ;D8EF -> 55535 FFFF->65535
+  00EF                 4     TempoL                  EQU 0xEF                ;FFFF -> D8EF = 2710 (10ms)
+  0032                 5     Quantasx                EQU 50                  ;50*10ms = 500ms / 0.5s
+  0002                 6     Quantasx1s              EQU 2                   ;2*500ms = 1000ms = 1s
+                       7             
+  0000                 8     Nada                    EQU 0
+  0001                 9     Start                   EQU 1
+  0002                10     Stop                    EQU 2
+  0003                11     Pause                   EQU 3
+                      12             
+  0090                13     PortaUnidades   EQU P1
+  0080                14     PortaDezenas    EQU P0
+                      15             
+  00A0                16     Ponto                   EQU P2.0
+  00B0                17     Iniciar                 EQU P3.0
+  00B1                18     Parar                   EQU P3.1
+                      19             
+----                  20     CSEG AT 0000H
+0000 804E             21     JMP Inicio
+                      22     
+----                  23     CSEG AT 0003H                                   ;Tratamento interrupcao externa (P3.2 vai e
+                             xecutar InterrupcaoExt0)
+0003 018E             24     JMP InterrupcaoExt0
+                      25     
+----                  26     CSEG AT 000BH                                   ;Tratamento interrupcao0 timer (Quando Over
+                             flow)
+000B 0191             27     JMP InterrupcaoTemp0
+                      28     
+----                  29     CSEG AT 0050H                                   ;Programa Normal
+                      30     
+0050                  31     Inicio:
+0050 758107           32             Mov SP, #7
+0053 116B             33             CALL Inicializacoes
+0055 1174             34             CALL PrioridadeInterrupcoes
+0057 1178             35             CALL AtivaInterrupcoes
+0059 117E             36             CALL AtivaTemporizador
+                      37     
+005B                  38     Principal:
+005B 30B005           39             JNB Iniciar, EstadoIniciar
+005E 30B106           40             JNB Parar, EstadoParar
+0061 80F8             41             JMP Principal
+                      42             
+0063                  43     EstadoIniciar:
+0063 7901             44             MOV R1, #Start
+0065 80F4             45             JMP Principal
+                      46     
+0067                  47     EstadoParar:
+0067 7902             48             MOV R1, #Stop
+0069 80F0             49             JMP Principal
+                      50             
+                      51             
+                      52     ;Rotina para fazer as inicializacoes do programa        
+                      53     ;////////////////////////////////////////////////////////////////////////////   
+                      54     
+006B                  55     Inicializacoes:                                                                            
+A51 MACRO ASSEMBLER  PROJETO4                                                             04/18/2024 14:36:05 PAGE     2
+
+                                  ;nada
+006B 7900             56             MOV R1, #Nada
+006D 759000           57             MOV PortaUnidades, #00000000b
+0070 758000           58             MOV PortaDezenas, #00000000b
+0073 22               59             RET
+                      60             
+0074                  61     PrioridadeInterrupcoes:                                                                 ;na
+                             da
+0074 75B802           62             MOV IP, #00000010b
+0077 22               63             RET     
+                      64             
+0078                  65     AtivaInterrupcoes:                                                                         
+                                  ;nada
+0078 75A883           66             MOV IE,#10000011b
+007B D288             67             SETB IT0
+007D 22               68             RET
+                      69             
+007E                  70     AtivaTemporizador:                                                                         
+                                  ;nada
+007E 758901           71             MOV TMOD, #00000001b                    ;Modo de contagem 16b
+0081 758CD8           72             MOV TH0, #TempoH
+0084 758AEF           73             MOV TL0, #TempoL
+0087 7832             74             MOV R0, #Quantasx
+0089 7EC9             75             MOV R6, #FimTempo0
+008B D28C             76             SETB TR0
+008D 22               77             RET
+                      78     
+                      79     ;////////////////////////////////////////////////////////////////////////////
+                      80     
+                      81     ;CSEG AT 0003H
+008E                  82     InterrupcaoExt0:
+008E 7903             83             MOV R1, #Pause  
+0090 32               84             RETI
+                      85             
+                      86     ;CSEG AT 000BH
+0091                  87     InterrupcaoTemp0:
+                      88     
+                      89             ;Entra aqui cada 10ms
+0091 758AD8           90             MOV TL0, #TempoH
+0094 758CEF           91             MOV TH0, #TempoL
+                      92             
+0097 DE30             93             DJNZ R6, FimTempo0
+                      94             
+                      95             ;Entra aqui cada 500ms
+0099 7E32             96             MOV R6, #Quantasx
+009B B2A0             97             CPL Ponto
+                      98             
+009D DF2A             99             DJNZ R7, FimTempo0
+                     100             
+                     101             ;Entra aqui cada 1000ms
+009F 7F02            102             MOV R7,#Quantasx1s
+                     103             
+00A1 B90301          104             CJNE R1, #Pause, TesteIniciar
+00A4 32              105             RETI
+                     106             
+                     107     
+                     108     
+00A5                 109     TesteIniciar:
+00A5 B90117          110             CJNE R1, #Start, TesteParar
+                     111             
+                     112             ;///////////
+00A8 E590            113                     MOV A, PortaUnidades                                                    
+00AA B4090C          114                     CJNE A, #9, ContarUm                                                    
+00AD 759000          115                     MOV PortaUnidades, #00000000b
+00B0 E580            116                     MOV A, PortaDezenas                                                        
+                                  
+A51 MACRO ASSEMBLER  PROJETO4                                                             04/18/2024 14:36:05 PAGE     3
+
+00B2 B40507          117                     CJNE A, #5, ContarZe                                                    
+00B5 758000          118                     MOV PortaDezenas, #00000000b
+00B8 32              119                     RETI
+                     120                     
+00B9                 121             ContarUm:
+00B9 0590            122                     Inc PortaUnidades                                                          
+                                                          
+00BB 32              123                     RETI
+                     124                     
+00BC                 125             ContarZe:
+00BC 0580            126                     Inc PortaDezenas
+00BE 32              127             RETI
+                     128             
+00BF                 129     TesteParar:
+00BF B90207          130             CJNE R1, #Stop, FimTempo0
+00C2 759000          131             MOV PortaUnidades, #00000000b
+00C5 758000          132             MOV PortaDezenas, #00000000b
+00C8 32              133             RETI
+                     134     
+00C9                 135     FimTempo0:
+00C9 32              136     RETI
+                     137     
+                     138     END
+                             
+                             
+                             
+                             
+A51 MACRO ASSEMBLER  PROJETO4                                                             04/18/2024 14:36:05 PAGE     4
+
+SYMBOL TABLE LISTING
+------ ----- -------
+
+
+N A M E                 T Y P E  V A L U E   ATTRIBUTES
+
+ATIVAINTERRUPCOES. . .  C ADDR   0078H   A   
+ATIVATEMPORIZADOR. . .  C ADDR   007EH   A   
+CONTARUM . . . . . . .  C ADDR   00B9H   A   
+CONTARZE . . . . . . .  C ADDR   00BCH   A   
+ESTADOINICIAR. . . . .  C ADDR   0063H   A   
+ESTADOPARAR. . . . . .  C ADDR   0067H   A   
+FIMTEMPO0. . . . . . .  C ADDR   00C9H   A   
+IE . . . . . . . . . .  D ADDR   00A8H   A   
+INICIALIZACOES . . . .  C ADDR   006BH   A   
+INICIAR. . . . . . . .  B ADDR   00B0H.0 A   
+INICIO . . . . . . . .  C ADDR   0050H   A   
+INTERRUPCAOEXT0. . . .  C ADDR   008EH   A   
+INTERRUPCAOTEMP0 . . .  C ADDR   0091H   A   
+IP . . . . . . . . . .  D ADDR   00B8H   A   
+IT0. . . . . . . . . .  B ADDR   0088H.0 A   
+NADA . . . . . . . . .  N NUMB   0000H   A   
+P0 . . . . . . . . . .  D ADDR   0080H   A   
+P1 . . . . . . . . . .  D ADDR   0090H   A   
+P2 . . . . . . . . . .  D ADDR   00A0H   A   
+P3 . . . . . . . . . .  D ADDR   00B0H   A   
+PARAR. . . . . . . . .  B ADDR   00B0H.1 A   
+PAUSE. . . . . . . . .  N NUMB   0003H   A   
+PONTO. . . . . . . . .  B ADDR   00A0H.0 A   
+PORTADEZENAS . . . . .  D ADDR   0080H   A   
+PORTAUNIDADES. . . . .  D ADDR   0090H   A   
+PRINCIPAL. . . . . . .  C ADDR   005BH   A   
+PRIORIDADEINTERRUPCOES  C ADDR   0074H   A   
+QUANTASX . . . . . . .  N NUMB   0032H   A   
+QUANTASX1S . . . . . .  N NUMB   0002H   A   
+SP . . . . . . . . . .  D ADDR   0081H   A   
+START. . . . . . . . .  N NUMB   0001H   A   
+STOP . . . . . . . . .  N NUMB   0002H   A   
+TEMPOH . . . . . . . .  N NUMB   00D8H   A   
+TEMPOL . . . . . . . .  N NUMB   00EFH   A   
+TESTEINICIAR . . . . .  C ADDR   00A5H   A   
+TESTEPARAR . . . . . .  C ADDR   00BFH   A   
+TH0. . . . . . . . . .  D ADDR   008CH   A   
+TL0. . . . . . . . . .  D ADDR   008AH   A   
+TMOD . . . . . . . . .  D ADDR   0089H   A   
+TR0. . . . . . . . . .  B ADDR   0088H.4 A   
+
+
+REGISTER BANK(S) USED: 0 
+
+
+ASSEMBLY COMPLETE.  0 WARNING(S), 0 ERROR(S)

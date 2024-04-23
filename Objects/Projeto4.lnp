@@ -1,0 +1,3 @@
+".\Objects\Projeto4.obj" 
+TO ".\Objects\Projeto4" 
+PRINT(".\Listings\Projeto4.m51")

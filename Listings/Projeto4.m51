@@ -1,0 +1,150 @@
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                    04/18/2024  14:36:12  PAGE 1
+
+
+BL51 BANKED LINKER/LOCATER V6.22.4.0, INVOKED BY:
+C:\KEIL_V5\C51\BIN\BL51.EXE .\Objects\Projeto4.obj TO .\Objects\Projeto4 PRINT (.\Listings\Projeto4.m51)
+
+
+INPUT MODULES INCLUDED:
+  .\Objects\Projeto4.obj (PROJETO4)
+
+
+LINK MAP OF MODULE:  .\Objects\Projeto4 (PROJETO4)
+
+
+            TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
+            -----------------------------------------------------
+
+            * * * * * * *   D A T A   M E M O R Y   * * * * * * *
+            REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
+
+            * * * * * * *   C O D E   M E M O R Y   * * * * * * *
+            CODE    0000H     0002H     ABSOLUTE     
+                    0002H     0001H                  *** GAP ***
+            CODE    0003H     0002H     ABSOLUTE     
+                    0005H     0006H                  *** GAP ***
+            CODE    000BH     0002H     ABSOLUTE     
+                    000DH     0043H                  *** GAP ***
+            CODE    0050H     007AH     ABSOLUTE     
+
+
+
+SYMBOL TABLE OF MODULE:  .\Objects\Projeto4 (PROJETO4)
+
+  VALUE           TYPE          NAME
+  ----------------------------------
+
+  -------         MODULE        PROJETO4
+  C:0078H         SYMBOL        ATIVAINTERRUPCOES
+  C:007EH         SYMBOL        ATIVATEMPORIZADOR
+  C:00B9H         SYMBOL        CONTARUM
+  C:00BCH         SYMBOL        CONTARZE
+  C:0063H         SYMBOL        ESTADOINICIAR
+  C:0067H         SYMBOL        ESTADOPARAR
+  C:00C9H         SYMBOL        FIMTEMPO0
+  D:00A8H         SYMBOL        IE
+  C:006BH         SYMBOL        INICIALIZACOES
+  B:00B0H.0       SYMBOL        INICIAR
+  C:0050H         SYMBOL        INICIO
+  C:008EH         SYMBOL        INTERRUPCAOEXT0
+  C:0091H         SYMBOL        INTERRUPCAOTEMP0
+  D:00B8H         SYMBOL        IP
+  B:0088H.0       SYMBOL        IT0
+  N:0000H         SYMBOL        NADA
+  D:0080H         SYMBOL        P0
+  D:0090H         SYMBOL        P1
+  D:00A0H         SYMBOL        P2
+  D:00B0H         SYMBOL        P3
+  B:00B0H.1       SYMBOL        PARAR
+  N:0003H         SYMBOL        PAUSE
+  B:00A0H.0       SYMBOL        PONTO
+  D:0080H         SYMBOL        PORTADEZENAS
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  04/18/2024  14:36:12  PAGE 2
+
+
+  D:0090H         SYMBOL        PORTAUNIDADES
+  C:005BH         SYMBOL        PRINCIPAL
+  C:0074H         SYMBOL        PRIORIDADEINTERRUPCOES
+  N:0032H         SYMBOL        QUANTASX
+  N:0002H         SYMBOL        QUANTASX1S
+  D:0081H         SYMBOL        SP
+  N:0001H         SYMBOL        START
+  N:0002H         SYMBOL        STOP
+  N:00D8H         SYMBOL        TEMPOH
+  N:00EFH         SYMBOL        TEMPOL
+  C:00A5H         SYMBOL        TESTEINICIAR
+  C:00BFH         SYMBOL        TESTEPARAR
+  D:008CH         SYMBOL        TH0
+  D:008AH         SYMBOL        TL0
+  D:0089H         SYMBOL        TMOD
+  B:0088H.4       SYMBOL        TR0
+  C:0000H         LINE#         21
+  C:0003H         LINE#         24
+  C:000BH         LINE#         27
+  C:0050H         LINE#         32
+  C:0053H         LINE#         33
+  C:0055H         LINE#         34
+  C:0057H         LINE#         35
+  C:0059H         LINE#         36
+  C:005BH         LINE#         39
+  C:005EH         LINE#         40
+  C:0061H         LINE#         41
+  C:0063H         LINE#         44
+  C:0065H         LINE#         45
+  C:0067H         LINE#         48
+  C:0069H         LINE#         49
+  C:006BH         LINE#         56
+  C:006DH         LINE#         57
+  C:0070H         LINE#         58
+  C:0073H         LINE#         59
+  C:0074H         LINE#         62
+  C:0077H         LINE#         63
+  C:0078H         LINE#         66
+  C:007BH         LINE#         67
+  C:007DH         LINE#         68
+  C:007EH         LINE#         71
+  C:0081H         LINE#         72
+  C:0084H         LINE#         73
+  C:0087H         LINE#         74
+  C:0089H         LINE#         75
+  C:008BH         LINE#         76
+  C:008DH         LINE#         77
+  C:008EH         LINE#         83
+  C:0090H         LINE#         84
+  C:0091H         LINE#         90
+  C:0094H         LINE#         91
+  C:0097H         LINE#         93
+  C:0099H         LINE#         96
+  C:009BH         LINE#         97
+  C:009DH         LINE#         99
+  C:009FH         LINE#         102
+  C:00A1H         LINE#         104
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  04/18/2024  14:36:12  PAGE 3
+
+
+  C:00A4H         LINE#         105
+  C:00A5H         LINE#         110
+  C:00A8H         LINE#         113
+  C:00AAH         LINE#         114
+  C:00ADH         LINE#         115
+  C:00B0H         LINE#         116
+  C:00B2H         LINE#         117
+  C:00B5H         LINE#         118
+  C:00B8H         LINE#         119
+  C:00B9H         LINE#         122
+  C:00BBH         LINE#         123
+  C:00BCH         LINE#         126
+  C:00BEH         LINE#         127
+  C:00BFH         LINE#         130
+  C:00C2H         LINE#         131
+  C:00C5H         LINE#         132
+  C:00C8H         LINE#         133
+  C:00C9H         LINE#         136
+  -------         ENDMOD        PROJETO4
+
+******************************************************************************
+* RESTRICTED VERSION WITH 0800H BYTE CODE SIZE LIMIT; USED: 0080H BYTE ( 6%) *
+******************************************************************************
+
+Program Size: data=8.0 xdata=0 code=128
+LINK/LOCATE RUN COMPLETE.  0 WARNING(S),  0 ERROR(S)
